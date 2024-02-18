@@ -1,0 +1,41 @@
+import random
+import itertools
+import numpy as np
+import math
+
+def ncr(n, r):
+    f = math.factorial
+    return f(n) // f(r) // f(n-r)
+
+
+def simulate_hat(n):
+    # Initialize the hat with numbers 1 through n  
+    init_hat = []
+    for i in range(1, n + 1):
+        init_hat.append(i)
+
+    running_list = [0,0]
+    
+    
+    for comb in itertools.combinations(init_hat, 2):
+        running_list = np.vstack([running_list,comb])
+    running_list = np.delete(running_list,0,0)
+    
+    k = 0
+    running_hat = []
+    
+    
+    for k in range(0, ncr(n,2)):
+        temp = init_hat.copy()
+        temp2 = (running_list[k][0])
+        temp3 = (running_list[k][1])
+        temp.remove(temp2)
+        temp.remove(temp3)
+        difference = abs(running_list[k][0] - running_list[k][1])
+        temp.append(difference)
+        temp.sort()
+        print(temp)
+
+        
+        
+simulate_hat(5)
