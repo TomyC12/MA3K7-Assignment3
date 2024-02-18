@@ -1,0 +1,26 @@
+import random
+
+def simulate_hat(n):
+    # Initialize the hat with numbers 1 through n
+    hat = list(range(1, n + 1))
+
+    while len(hat) > 1:
+        # Draw two pieces of paper randomly
+        draw1 = random.choice(hat)
+        hat.remove(draw1)
+        
+        draw2 = random.choice(hat)
+        hat.remove(draw2)
+
+        # Calculate the difference
+        difference = abs(draw1 - draw2)
+
+        # Add the difference to the hat
+        hat.append(difference)
+
+    # The remaining piece in the hat is the final result
+    return hat[0]
+
+# Example: simulate the process with 5 pieces of paper
+result = simulate_hat(2023)
+print("The final result is:", result)
