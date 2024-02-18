@@ -1,0 +1,82 @@
+import random
+import itertools
+import numpy as np
+import math
+
+def ncr(n, r):
+    f = math.factorial
+    return f(n) // f(r) // f(n-r)
+
+def simulate_hat(n):
+    # Initialize the hat with numbers 1 through n  
+    init_hat = []
+    for i in range(1, n + 1):
+        init_hat.append(i)
+        
+    running_hat = []
+    running_hat = init_hat            
+    running_hat = np.vstack([running_hat,running_hat])
+    
+    #loops over the depth of the code
+    for y in range(1,n):
+        
+        
+        #loops over the width of the each row
+        width_count = 1
+        for z in range(0, width_count): 
+        
+            running_hat_init = []
+            for x in range (n - y + 1):
+                running_hat_init.append(0)
+                
+            
+            draw_combos = [0,0]
+
+            for comb in itertools.combinations(running_hat[z], 2):
+                draw_combos = np.vstack([draw_combos,comb])
+            draw_combos = np.delete(draw_combos,0,0)
+            ##print(draw_combos)
+            
+            ##running_hat = running_hat_init
+            ##running_hat = np.delete(running_hat_init,0,0)
+            
+            ##print(running_hat)
+            
+            element_hat = []
+            for w in range (n - y):
+                element_hat.append(0)
+
+            k = 0
+            for k in range(0, ncr(n - y + 1 ,2)):
+                
+                temp = running_hat[z].copy()
+                #print(temp)
+                
+                #draw1 = (draw_combos[k][0])
+                #draw2 = (draw_combos[k][1])
+                
+                draw1, draw2 = draw_combos[k]
+                
+                temp = np.delete(temp, np.where(temp == draw1))
+                temp = np.delete(temp, np.where(temp == draw2))
+                
+                
+                difference = abs(draw_combos[k][0] - draw_combos[k][1])
+                temp = np.concatenate([temp, [difference]])
+                temp = np.sort(temp)
+                
+                print(temp)
+                
+                element_hat = np.vstack([element_hat,temp])
+                width_count += 1
+                
+            element_hat = np.delete(element_hat,0,0)
+            running_hat = element_hat
+            #print(element_hat)
+            
+            print("Element complete")
+        print("Width complete")
+    print("Depth complete")
+    
+    
+simulate_hat(4)
