@@ -1,0 +1,52 @@
+import random
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def simulate_hat(n, k):
+    results = []
+    
+    for _ in range(k):
+        hat = list(range(1, n + 1))
+
+        while len(hat) > 1:
+            draw1 = random.choice(hat)
+            hat.remove(draw1)
+            
+            draw2 = random.choice(hat)
+            hat.remove(draw2)
+
+            difference = abs(draw1 - draw2)
+            hat.append(difference)
+
+        results.append(hat[0])
+
+    return results
+
+def plot_results(results, initial_number, subplot_index):
+    plt.subplot(10, 10, subplot_index)
+    df = pd.DataFrame(results, columns=['Final Result'])
+    table = pd.value_counts(df['Final Result']).reset_index().rename(columns={'index': 'Result', 'Final Result': 'Frequency'})
+    
+    #print(f"Simulation Results Table for {initial_number} pieces:")
+    #print(table)
+    
+    colors = ['red' if num % 2 != 0 else 'green' for num in table['Result']]
+    
+    plt.bar(table['Result'], table['Frequency'], color=colors)
+    plt.title(f'Simulation Results for {initial_number} pieces')
+    plt.xlabel('Final Result')
+    plt.ylabel('Frequency')
+
+# Example: simulate the process 25 times for every n from 1 to 25
+k = 25
+plt.figure(figsize=(15, 15))
+subplot_index = 1
+
+for n in range(2, 102):
+    simulate_results = simulate_hat(n, k)
+    plot_results(simulate_results, n, subplot_index)
+    subplot_index += 1
+
+plt.tight_layout()
+plt.savefig('simulation_results_100.png')
+plt.show()
