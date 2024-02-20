@@ -1,0 +1,50 @@
+import random
+import pandas as pd
+import matplotlib.pyplot as plt
+
+def simulate_hat(n, k):
+    results = []
+    
+    for _ in range(k):
+        hat = list(range(1, n + 1))
+
+        while len(hat) > 1:
+            draw1 = random.choice(hat)
+            hat.remove(draw1)
+            
+            draw2 = random.choice(hat)
+            hat.remove(draw2)
+
+            difference = abs(draw1 - draw2)
+            hat.append(difference)
+
+        results.append(hat[0])
+
+    return results
+
+def plot_results(results, initial_number, subplot_index):
+    plt.subplot(1, 1, subplot_index)
+    df = pd.DataFrame(results, columns=['Final Result'])
+    table = pd.value_counts(df['Final Result']).reset_index().rename(columns={'index': 'Result', 'Final Result': 'Frequency'})
+    
+    # Sort the table by the 'Result' column
+    table = table.sort_values(by='Result')
+
+    print(f"Simulation Results Table for {initial_number} pieces:")
+    print(table)
+    
+    plt.hist(df['Final Result'], bins=10, align='left', rwidth=0.8, color='skyblue', edgecolor='black')
+    plt.title(f'Histogram of Simulation Results for {initial_number} pieces')
+    plt.xlabel('Final Result')
+    plt.ylabel('Frequency')
+    plt.xticks(table['Result'])  # Set x-axis ticks to match the sorted results
+
+# Example: simulate the process 25 times with different initial numbers of pieces of paper
+k = 1000
+plt.figure(figsize=(10, 8))
+
+simulate_results_2024 = simulate_hat(2024, k)
+plot_results(simulate_results_2024, 2024, 1)
+
+plt.tight_layout()
+plt.show()
